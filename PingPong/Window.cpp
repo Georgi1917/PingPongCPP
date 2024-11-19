@@ -2,17 +2,74 @@
 #include "Window.h"
 using namespace std;
 
+const int timerID = 1;
+const int timerInterval = 100;
+
 HWND leftRect;
-int leftX{ 50 };
-int leftY{ 50 };
-const int leftWidth{ 20 };
-const int leftHeight{ 60 };
+int leftX{ 50 }, leftY{ 50 };
+const int leftWidth{ 20 }, leftHeight{ 60 };
 
 HWND rightRect;
-int rightX{ 560 };
-int rightY{ 370 };
-const int rightWidth{ 20 };
-const int rightHeight{ 60 };
+int rightX{ 560 }, rightY{ 370 };
+const int rightWidth{ 20 }, rightHeight{ 60 };
+
+HWND ballObj;
+int ballX{ 320 }, ballY{ 240 }, ballDX{ 5 }, ballDY{ 5 };
+const int ballWidth{ 8 }, ballHeight{ 8 };
+
+void CheckLeftCollision(HWND rectObj, HWND ball) {
+
+	RECT rect1, rect2, intersection;
+
+	GetWindowRect(rectObj, &rect1);
+	GetWindowRect(ball, &rect2);
+
+	if (IntersectRect(&intersection, &rect1, &rect2)) {
+
+		int midY = ((rect1.top + rect1.bottom) / 2);
+
+		if (rect2.bottom <= midY) {
+			ballDX = 5;
+			ballDY = -5;
+			cout << "Top" << endl;
+		}
+		else if (rect2.bottom >= midY) {
+			ballDX = 5;
+			ballDY = 5;
+			cout << midY << endl;
+			cout << rect2.bottom << endl;
+		}
+
+	}
+
+}
+
+void CheckRightCollision(HWND rectObj, HWND ball) {
+
+	RECT rect1, rect2, intersection;
+
+	GetWindowRect(rectObj, &rect1);
+	GetWindowRect(ball, &rect2);
+
+	if (IntersectRect(&intersection, &rect1, &rect2)) {
+
+		int midY = (rect1.top + rect1.bottom) / 2;
+
+		if (rect2.bottom <= midY) {
+			ballDX = -5;
+			ballDY = -5;
+			cout << "Top" << endl;
+		}
+		else if (rect2.bottom >= midY) {
+			ballDX = -5;
+			ballDY = 5;
+			cout << midY << endl;
+			cout << rect2.bottom << endl;
+		}
+
+	}
+
+}
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -23,7 +80,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			L"STATIC",
 			NULL,
 			WS_CHILD | WS_VISIBLE | SS_WHITERECT,
-			50, 50, 20, 60,
+			leftX, leftY, leftWidth, leftHeight,
 			hWnd,
 			NULL,
 			NULL,
@@ -34,15 +91,46 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			L"STATIC",
 			NULL,
 			WS_CHILD | WS_VISIBLE | SS_WHITERECT,
-			560, 370, 20, 60,
+			rightX, rightY, rightWidth, rightHeight,
 			hWnd,
 			NULL,
 			NULL,
 			NULL
 		);
 
+		ballObj = CreateWindow(
+			L"STATIC",
+			NULL,
+			WS_CHILD | WS_VISIBLE | SS_WHITERECT,
+			ballX, ballY,
+			ballWidth, ballHeight,
+			hWnd,
+			NULL,
+			NULL,
+			NULL
+		);
+
+		SetTimer(hWnd, timerID, timerInterval, NULL);
+
 		break;
 	}
+
+	case WM_TIMER:
+		ballX += ballDX;
+		ballY += ballDY;
+
+		RECT ballClientRect;
+		GetClientRect(hWnd, &ballClientRect);
+
+		// Checks for out of bounds
+		if (ballX <= 0 || ballX + ballWidth >= ballClientRect.right) ballDX = -ballDX;
+		if (ballY <= 0 || ballY + ballHeight >= ballClientRect.bottom) ballDY = -ballDY;
+
+		// Checks for collision with left or right RECT
+		CheckLeftCollision(leftRect, ballObj);
+		CheckRightCollision(rightRect, ballObj);
+
+		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 	case WM_KEYDOWN:
 

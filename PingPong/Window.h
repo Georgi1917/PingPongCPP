@@ -9,7 +9,6 @@ class Window
 public:
 	Window();
 	~Window();
-
 	bool ProccessMessages();
 
 private:
