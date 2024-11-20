@@ -5,6 +5,8 @@ using namespace std;
 const int timerID = 1;
 const int timerInterval = 100;
 
+bool hasEnded{ false };
+
 HWND leftRect;
 int leftX{ 50 }, leftY{ 50 };
 const int leftWidth{ 8 }, leftHeight{ 40 };
@@ -16,6 +18,8 @@ const int rightWidth{ 8 }, rightHeight{ 40 };
 HWND ballObj;
 int ballX{ 320 }, ballY{ 240 }, ballDX{ -4 }, ballDY{ -4 };
 const int ballWidth{ 8 }, ballHeight{ 8 };
+
+HWND lossText, playAgainText;
 
 void CheckLeftCollision(HWND rectObj, HWND ball) {
 
@@ -136,17 +140,31 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			DestroyWindow(rightRect);
 			DestroyWindow(ballObj);
 
-			HWND lossText = CreateWindow(
+			lossText = CreateWindow(
 				L"STATIC",
 				L"GAME OVER",
-				WS_VISIBLE | WS_CHILD | SS_LEFT,
-				310, 225,
-				50, 30,
+				WS_VISIBLE | WS_CHILD | SS_CENTER,
+				320 - 40, 240 - 25,
+				80, 50,
 				hWnd,
 				NULL,
 				NULL,
 				NULL
 			);
+
+			playAgainText = CreateWindow(
+				L"STATIC",
+				L"PRESS Y TO PLAY AGAIN",
+				WS_VISIBLE | WS_CHILD | SS_CENTER,
+				320 - 40, 280 - 25,
+				80, 50,
+				hWnd,
+				NULL,
+				NULL,
+				NULL
+			);
+
+			hasEnded = true;
 		}
 
 		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -167,6 +185,60 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		case VK_DOWN:
 			rightY += 10;
 			break;
+		case 'Y':
+			if (hasEnded) {
+
+				hasEnded = false;
+
+				DestroyWindow(lossText);
+				DestroyWindow(playAgainText);
+
+				ballX = 320;
+				ballY = 240;
+				ballDX = -4;
+				ballDY = -4;
+
+				leftY = 50;
+				rightY = 370;
+
+				leftRect = CreateWindow(
+					L"STATIC",
+					NULL,
+					WS_CHILD | WS_VISIBLE | SS_WHITERECT,
+					leftX, leftY, leftWidth, leftHeight,
+					hWnd,
+					NULL,
+					NULL,
+					NULL
+				);
+
+				rightRect = CreateWindow(
+					L"STATIC",
+					NULL,
+					WS_CHILD | WS_VISIBLE | SS_WHITERECT,
+					rightX, rightY, rightWidth, rightHeight,
+					hWnd,
+					NULL,
+					NULL,
+					NULL
+				);
+
+				ballObj = CreateWindow(
+					L"STATIC",
+					NULL,
+					WS_CHILD | WS_VISIBLE | SS_WHITERECT,
+					ballX, ballY, ballWidth, ballHeight,
+					hWnd,
+					NULL,
+					NULL,
+					NULL
+				);
+
+				SetWindowPos(leftRect, NULL, leftX, leftY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				SetWindowPos(rightRect, NULL, rightX, rightY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+			}
 		}
 	
 

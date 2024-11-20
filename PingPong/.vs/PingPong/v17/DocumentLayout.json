@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "E:\\CPP_Projects\\PingPongCPP\\PingPong\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|E:\\CPP_Projects\\PingPongCPP\\PingPong\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|E:\\CPP_Projects\\PingPongCPP\\PingPong\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|solutionrelative:Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|E:\\CPP_Projects\\PingPongCPP\\PingPong\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{69D9C5A1-B3E1-4623-8758-8B15D97461BB}|PingPong.vcxproj|E:\\CPP_Projects\\PingPongCPP\\PingPong\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -22,17 +22,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Window.cpp",
               "DocumentMoniker": "E:\\CPP_Projects\\PingPongCPP\\PingPong\\Window.cpp",
               "RelativeDocumentMoniker": "Window.cpp",
               "ToolTip": "E:\\CPP_Projects\\PingPongCPP\\PingPong\\Window.cpp",
               "RelativeToolTip": "Window.cpp",
-              "ViewState": "AgIAAHwAAAAAAAAAAAAqwI8AAAAGAAAAAAAAAA==",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAAAJEAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-15T17:38:20.479Z",
               "EditorCaption": ""
@@ -52,7 +52,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "main.cpp",
               "DocumentMoniker": "E:\\CPP_Projects\\PingPongCPP\\PingPong\\main.cpp",
               "RelativeDocumentMoniker": "main.cpp",
