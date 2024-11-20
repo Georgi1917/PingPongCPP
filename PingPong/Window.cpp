@@ -73,28 +73,6 @@ void CheckRightCollision(HWND rectObj, HWND ball) {
 
 }
 
-bool CheckLeftLoss(HWND leftRect, HWND ballObj) {
-	RECT rect1, rect2;
-
-	GetWindowRect(leftRect, &rect1);
-	GetWindowRect(ballObj, &rect2);
-
-	if (rect1.left > rect2.right) return true;
-
-	return false;
-}
-
-bool CheckRightLoss(HWND rightRect, HWND ballObj) {
-	RECT rect1, rect2;
-
-	GetWindowRect(rightRect, &rect1);
-	GetWindowRect(ballObj, &rect2);
-
-	if (rect1.right < rect2.left) return true;
-
-	return false;
-}
-
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	switch (uMsg) 
@@ -147,14 +125,29 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		GetClientRect(hWnd, &ballClientRect);
 
 		// Checks for out of bounds
-		if (ballX <= 0 || ballX + ballWidth >= ballClientRect.right) ballDX = -ballDX;
 		if (ballY <= 0 || ballY + ballHeight >= ballClientRect.bottom) ballDY = -ballDY;
 
 		// Checks for collision with left or right RECT
 		CheckLeftCollision(leftRect, ballObj);
 		CheckRightCollision(rightRect, ballObj);
 
-		if (CheckLeftLoss(leftRect, ballObj) || CheckRightLoss(rightRect, ballObj)) DestroyWindow(hWnd);
+		if (ballX <= 0 || ballX + ballHeight >= ballClientRect.right) {
+			DestroyWindow(leftRect);
+			DestroyWindow(rightRect);
+			DestroyWindow(ballObj);
+
+			HWND lossText = CreateWindow(
+				L"STATIC",
+				L"GAME OVER",
+				WS_VISIBLE | WS_CHILD | SS_LEFT,
+				310, 225,
+				50, 30,
+				hWnd,
+				NULL,
+				NULL,
+				NULL
+			);
+		}
 
 		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
