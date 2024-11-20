@@ -7,14 +7,14 @@ const int timerInterval = 100;
 
 HWND leftRect;
 int leftX{ 50 }, leftY{ 50 };
-const int leftWidth{ 20 }, leftHeight{ 60 };
+const int leftWidth{ 8 }, leftHeight{ 40 };
 
 HWND rightRect;
 int rightX{ 560 }, rightY{ 370 };
-const int rightWidth{ 20 }, rightHeight{ 60 };
+const int rightWidth{ 8 }, rightHeight{ 40 };
 
 HWND ballObj;
-int ballX{ 320 }, ballY{ 240 }, ballDX{ 5 }, ballDY{ 5 };
+int ballX{ 320 }, ballY{ 240 }, ballDX{ -4 }, ballDY{ -4 };
 const int ballWidth{ 8 }, ballHeight{ 8 };
 
 void CheckLeftCollision(HWND rectObj, HWND ball) {
@@ -28,16 +28,17 @@ void CheckLeftCollision(HWND rectObj, HWND ball) {
 
 		int midY = ((rect1.top + rect1.bottom) / 2);
 
-		if (rect2.bottom <= midY) {
+		if (rect2.bottom < midY) {
 			ballDX = 5;
 			ballDY = -5;
-			cout << "Top" << endl;
 		}
 		else if (rect2.bottom >= midY) {
 			ballDX = 5;
 			ballDY = 5;
-			cout << midY << endl;
-			cout << rect2.bottom << endl;
+		}
+		else if (rect2.bottom == midY) {
+			ballDX = 5;
+			ballDY = 0;
 		}
 
 	}
@@ -55,20 +56,43 @@ void CheckRightCollision(HWND rectObj, HWND ball) {
 
 		int midY = (rect1.top + rect1.bottom) / 2;
 
-		if (rect2.bottom <= midY) {
+		if (rect2.bottom < midY) {
 			ballDX = -5;
 			ballDY = -5;
-			cout << "Top" << endl;
 		}
-		else if (rect2.bottom >= midY) {
+		else if (rect2.bottom > midY) {
 			ballDX = -5;
 			ballDY = 5;
-			cout << midY << endl;
-			cout << rect2.bottom << endl;
+		}
+		else if (rect2.bottom == midY) {
+			ballDX = -5;
+			ballDY = 0;
 		}
 
 	}
 
+}
+
+bool CheckLeftLoss(HWND leftRect, HWND ballObj) {
+	RECT rect1, rect2;
+
+	GetWindowRect(leftRect, &rect1);
+	GetWindowRect(ballObj, &rect2);
+
+	if (rect1.left > rect2.right) return true;
+
+	return false;
+}
+
+bool CheckRightLoss(HWND rightRect, HWND ballObj) {
+	RECT rect1, rect2;
+
+	GetWindowRect(rightRect, &rect1);
+	GetWindowRect(ballObj, &rect2);
+
+	if (rect1.right < rect2.left) return true;
+
+	return false;
 }
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -119,6 +143,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		ballX += ballDX;
 		ballY += ballDY;
 
+		cout << ballX << ", " << ballY << endl;
+
 		RECT ballClientRect;
 		GetClientRect(hWnd, &ballClientRect);
 
@@ -129,6 +155,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		// Checks for collision with left or right RECT
 		CheckLeftCollision(leftRect, ballObj);
 		CheckRightCollision(rightRect, ballObj);
+
+		if (CheckLeftLoss(leftRect, ballObj) || CheckRightLoss(rightRect, ballObj)) cout << "You Lost!" << endl;
 
 		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
