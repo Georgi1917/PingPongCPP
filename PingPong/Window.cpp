@@ -26,7 +26,7 @@ void CheckLeftCollision(HWND rectObj, HWND ball) {
 
 	if (IntersectRect(&intersection, &rect1, &rect2)) {
 
-		int midY = ((rect1.top + rect1.bottom) / 2);
+		int midY = (rect1.top + rect1.bottom) / 2;
 
 		if (rect2.bottom < midY) {
 			ballDX = 5;
@@ -143,8 +143,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		ballX += ballDX;
 		ballY += ballDY;
 
-		cout << ballX << ", " << ballY << endl;
-
 		RECT ballClientRect;
 		GetClientRect(hWnd, &ballClientRect);
 
@@ -156,7 +154,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		CheckLeftCollision(leftRect, ballObj);
 		CheckRightCollision(rightRect, ballObj);
 
-		if (CheckLeftLoss(leftRect, ballObj) || CheckRightLoss(rightRect, ballObj)) cout << "You Lost!" << endl;
+		if (CheckLeftLoss(leftRect, ballObj) || CheckRightLoss(rightRect, ballObj)) DestroyWindow(hWnd);
 
 		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
