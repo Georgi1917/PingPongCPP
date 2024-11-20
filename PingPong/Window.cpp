@@ -156,7 +156,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 				L"STATIC",
 				L"PRESS Y TO PLAY AGAIN",
 				WS_VISIBLE | WS_CHILD | SS_CENTER,
-				320 - 40, 280 - 25,
+				320 - 40, 290 - 25,
 				80, 50,
 				hWnd,
 				NULL,
@@ -165,6 +165,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			);
 
 			hasEnded = true;
+
 		}
 
 		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -190,8 +191,14 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 				hasEnded = false;
 
-				DestroyWindow(lossText);
-				DestroyWindow(playAgainText);
+				SetWindowText(lossText, NULL);
+				SetWindowText(playAgainText, NULL);
+				
+				InvalidateRect(lossText, nullptr, TRUE);
+				InvalidateRect(playAgainText, nullptr, TRUE);
+
+				UpdateWindow(lossText);
+				UpdateWindow(playAgainText);
 
 				ballX = 320;
 				ballY = 240;
