@@ -135,6 +135,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		CheckLeftCollision(leftRect, ballObj);
 		CheckRightCollision(rightRect, ballObj);
 
+		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
 		if (ballX <= 0 || ballX + ballHeight >= ballClientRect.right) {
 			DestroyWindow(leftRect);
 			DestroyWindow(rightRect);
@@ -168,8 +170,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 		}
 
-		SetWindowPos(ballObj, NULL, ballX, ballY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-
 	case WM_KEYDOWN:
 
 		switch (wParam)
@@ -191,14 +191,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 				hasEnded = false;
 
-				SetWindowText(lossText, NULL);
-				SetWindowText(playAgainText, NULL);
-				
-				InvalidateRect(lossText, nullptr, TRUE);
-				InvalidateRect(playAgainText, nullptr, TRUE);
-
-				UpdateWindow(lossText);
-				UpdateWindow(playAgainText);
+				DestroyWindow(lossText);
+				DestroyWindow(playAgainText);
 
 				ballX = 320;
 				ballY = 240;
