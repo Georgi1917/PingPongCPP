@@ -5,7 +5,7 @@ using namespace std;
 const int timerID = 1;
 const int timerInterval = 100;
 
-bool hasEnded{ false };
+bool hasEnded{ false }, showText{ true };
 
 HWND leftRect;
 int leftX{ 50 }, leftY{ 50 };
@@ -18,8 +18,6 @@ const int rightWidth{ 8 }, rightHeight{ 40 };
 HWND ballObj;
 int ballX{ 320 }, ballY{ 240 }, ballDX{ -4 }, ballDY{ -4 };
 const int ballWidth{ 8 }, ballHeight{ 8 };
-
-HWND lossText, playAgainText;
 
 void CheckLeftCollision(HWND rectObj, HWND ball) {
 
@@ -142,32 +140,10 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			DestroyWindow(rightRect);
 			DestroyWindow(ballObj);
 
-			lossText = CreateWindow(
-				L"STATIC",
-				L"GAME OVER",
-				WS_VISIBLE | WS_CHILD | SS_CENTER,
-				320 - 40, 240 - 25,
-				80, 50,
-				hWnd,
-				NULL,
-				NULL,
-				NULL
-			);
-
-			playAgainText = CreateWindow(
-				L"STATIC",
-				L"PRESS Y TO PLAY AGAIN",
-				WS_VISIBLE | WS_CHILD | SS_CENTER,
-				320 - 40, 290 - 25,
-				80, 50,
-				hWnd,
-				NULL,
-				NULL,
-				NULL
-			);
-
+			showText = true;
 			hasEnded = true;
 
+			InvalidateRect(hWnd, NULL, TRUE);
 		}
 
 	case WM_KEYDOWN:
@@ -190,9 +166,9 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			if (hasEnded) {
 
 				hasEnded = false;
+				showText = false;
 
-				DestroyWindow(lossText);
-				DestroyWindow(playAgainText);
+				InvalidateRect(hWnd, NULL, TRUE);
 
 				ballX = 320;
 				ballY = 240;
@@ -253,6 +229,24 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		SetWindowPos(leftRect, NULL, leftX, leftY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 		SetWindowPos(rightRect, NULL, rightX, rightY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 		break;
+
+	case WM_PAINT:
+	{
+		if (hasEnded && showText) 
+		{
+			PAINTSTRUCT ps;
+			HDC hdc = BeginPaint(hWnd, &ps);
+
+			SetTextColor(hdc, RGB(255, 255, 255));
+			SetBkMode(hdc, TRANSPARENT);
+
+			const wchar_t* text = L"PRESS Y TO PLAY AGAIN";
+			TextOut(hdc, 320, 240, text, wcslen(text));
+
+			EndPaint(hWnd, &ps);
+		}
+		break;
+	}
 
 	case WM_CLOSE:
 		DestroyWindow(hWnd);

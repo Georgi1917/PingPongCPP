@@ -1,2 +1,3 @@
 ﻿  Window.cpp
+D:\CPPProjects\PingPongCPP\PingPong\Window.cpp(244,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   PingPong.vcxproj -> D:\CPPProjects\PingPongCPP\PingPong\x64\Debug\PingPong.exe
